@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Steam analytics</string>
+    <string name="edit_text_hint_enter_steam_id">Введите SteamID</string>
+    <string name="edit_text_enter_your_steam_id">Введите свой SteamId</string>
+    <string name="button_text_continue">Продолжить</string>
+
+    <string name="inventory">Инвентарь</string>
+</resources>
