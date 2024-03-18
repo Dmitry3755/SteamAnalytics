@@ -1,6 +1,7 @@
 package com.example.steamanalytics.dependencies_injection.modules
 
 import com.example.data.api.InventoryApi
+import com.example.data.api.ItemMarketApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +18,7 @@ object NetworkModule {
     @ViewModelScoped
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://steamcommunity.com/inventory/")
+            .baseUrl("https://steamcommunity.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -25,5 +26,11 @@ object NetworkModule {
     @ViewModelScoped
     fun provideInventoryApi(retrofit: Retrofit) : InventoryApi {
         return retrofit.create(InventoryApi::class.java)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideItemMarketApi(retrofit: Retrofit) : ItemMarketApi {
+        return retrofit.create(ItemMarketApi::class.java)
     }
 }

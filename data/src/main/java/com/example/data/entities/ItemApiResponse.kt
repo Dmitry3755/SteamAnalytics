@@ -23,6 +23,6 @@ data class ItemApiResponse(
     val marketTradableRestriction: Int,
     @SerializedName("marketable")
     val marketable: Int,
-) {
-
-}
+    @SerializedName("tags")
+    val tags: List<TagItemApiResponse>,
+)

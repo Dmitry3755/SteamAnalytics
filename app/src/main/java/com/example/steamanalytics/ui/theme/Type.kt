@@ -21,13 +21,15 @@ val Typography = Typography(
         letterSpacing = 0.0.sp
     ),
     bodyLarge = TextStyle(
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
+        fontWeight = FontWeight.Bold,
+        fontFamily = FontFamily.Default,
+        fontSize = 18.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.15.sp
     ),
     bodyMedium = TextStyle(
         fontWeight = FontWeight.Medium,
+        fontFamily = FontFamily.Default,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp

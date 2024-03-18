@@ -1,6 +1,7 @@
 package com.example.domain.entities
 
-data class Item(
+data class InventoryItem(
+    val id: Int,
     val iconUrl: String,
     val descriptions: List<DescriptionItem>,
     val tradable: Int,
@@ -11,4 +12,5 @@ data class Item(
     val marketHashName: String,
     val marketTradableRestriction: Int,
     val marketable: Int,
-) {}
+    val tags : List<TagItem>
+)

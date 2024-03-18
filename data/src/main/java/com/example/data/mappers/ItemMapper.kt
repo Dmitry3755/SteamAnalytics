@@ -1,10 +1,11 @@
 package com.example.data.mappers
 
 import com.example.data.entities.ItemApiResponse
-import com.example.domain.entities.Item
+import com.example.domain.entities.InventoryItem
 
-fun ItemApiResponse.toItem(): Item {
-    return Item(
+fun ItemApiResponse.toItem(steamId : Int): InventoryItem {
+    return InventoryItem(
+        id = steamId,
         iconUrl = this.iconUrl,
         descriptions = this.descriptions.map { it.toItemDescription() },
         tradable = this.tradable,
@@ -14,6 +15,7 @@ fun ItemApiResponse.toItem(): Item {
         marketName = this.marketName,
         marketHashName = this.marketHashName,
         marketTradableRestriction = this.marketTradableRestriction,
-        marketable = this.marketable
+        marketable = this.marketable,
+        tags = this.tags.map { it.toItemTag() }
     )
 }

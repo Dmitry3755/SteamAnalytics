@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface InventoryApi {
-    @GET("{steamId}/730/2")
+    @GET("inventory/{steamId}/730/2")
     suspend fun get(@Path("steamId") steamId: String): Response<InventoryApiResponse>
 }
