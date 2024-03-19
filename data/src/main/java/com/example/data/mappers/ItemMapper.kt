@@ -19,3 +19,20 @@ fun ItemApiResponse.toItem(steamId : Int): InventoryItem {
         tags = this.tags.map { it.toItemTag() }
     )
 }
+
+fun InventoryItem.toItemApiResponse() : ItemApiResponse {
+    return ItemApiResponse(
+        id = this.id,
+        iconUrl = this.iconUrl,
+        descriptions = this.descriptions.map { it.toItemDescriptionApiResponse() },
+        tradable = this.tradable,
+        name = this.name,
+        nameColor = this.nameColor,
+        type = this.type,
+        marketName = this.marketName,
+        marketHashName = this.marketHashName,
+        marketTradableRestriction = this.marketTradableRestriction,
+        marketable = this.marketable,
+        tags = this.tags.map { it.toTagItemApiResponse() }
+    )
+}

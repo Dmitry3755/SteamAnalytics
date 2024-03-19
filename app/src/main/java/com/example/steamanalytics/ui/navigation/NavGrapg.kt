@@ -7,17 +7,21 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.steamanalytics.ui.screen.InventoryScreen
 import com.example.steamanalytics.ui.screen.SteamIdScreen
+import com.example.steamanalytics.viewmodels.AppViewModel
 import com.example.steamanalytics.viewmodels.InventoryViewModel
 
 @Composable
-fun NavGraph(viewModel: InventoryViewModel, context : Context){
+fun NavGraph(viewModel: InventoryViewModel, appViewModel: AppViewModel, context: Context) {
     val navigationController = rememberNavController()
-    NavHost(navController = navigationController, startDestination = Navigation.SteamIdScreen.route){
-        composable(route = Navigation.SteamIdScreen.route){
-            SteamIdScreen(navigationController, viewModel, context)
+    NavHost(
+        navController = navigationController,
+        startDestination = Navigation.SteamIdScreen.route
+    ) {
+        composable(route = Navigation.SteamIdScreen.route) {
+            SteamIdScreen(navigationController, viewModel, appViewModel, context)
         }
-        composable(route = Navigation.InventoryScreen.route){
-            InventoryScreen(navigationController, viewModel)
+        composable(route = Navigation.InventoryScreen.route) {
+            InventoryScreen(navigationController, viewModel, appViewModel)
         }
     }
 }

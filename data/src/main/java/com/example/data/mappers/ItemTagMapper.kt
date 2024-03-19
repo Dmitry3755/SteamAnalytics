@@ -12,3 +12,12 @@ fun TagItemApiResponse.toItemTag(): TagItem {
         localizedTagName = this.localizedTagName
     )
 }
+
+fun TagItem.toTagItemApiResponse(): TagItemApiResponse {
+    return TagItemApiResponse(
+        category = this.category,
+        internalName = this.internalName,
+        localizedCategoryName = this.localizedCategoryName,
+        localizedTagName = this.localizedTagName
+    )
+}

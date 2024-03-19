@@ -1,7 +1,6 @@
 package com.example.steamanalytics.ui.screen
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,26 +24,32 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.domain.utils.Result
 import com.example.steamanalytics.R
+import com.example.steamanalytics.services.CheckInternetState
 import com.example.steamanalytics.ui.component.AppTextField
 import com.example.steamanalytics.ui.component.HeadersTextView
 import com.example.steamanalytics.ui.component.MainButton
 import com.example.steamanalytics.ui.navigation.Navigation
 import com.example.steamanalytics.utils.ViewError
+import com.example.steamanalytics.viewmodels.AppViewModel
 import com.example.steamanalytics.viewmodels.InventoryViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SteamIdScreen(
     navController: NavController,
     viewModel: InventoryViewModel = hiltViewModel(),
+    appViewModel: AppViewModel,
     context: Context
 ) {
-
     val coroutineScope = rememberCoroutineScope()
     val verifyResultViewError = remember { mutableStateOf(ViewError()) }
 
@@ -100,16 +105,30 @@ fun SteamIdScreen(
                 stringResource(id = R.string.button_text_continue),
                 onClick = {
                     coroutineScope.launch {
-                        val result = viewModel.getInventory(verifyResultViewError)
-                        if (result is Result.Success) {
-                            viewModel.inventoryItemList = result.data.descriptions.toMutableList()
-                            navController.navigate(Navigation.InventoryScreen.route)
-                        } else if (result is Result.Error && !result.exception.message.isNullOrEmpty()) {
-                            Toast.makeText(
-                                context,
-                                result.exception.message,
-                                Toast.LENGTH_LONG
-                            ).show()
+                        withContext(Dispatchers.IO) {
+                            appViewModel.internetState.value = CheckInternetState(context)
+                            if (CheckInternetState(context)) {
+                                val result = viewModel.getInventory(verifyResultViewError)
+                                if (result is Result.Success) {
+                                    viewModel.inventoryItemList =
+                                        result.data.descriptions.toMutableList()
+                                    viewModel.insertItemDb()
+                                    viewModel.updateInventoryDb()
+                                    withContext(Dispatchers.Main) {
+                                        navController.navigate(Navigation.InventoryScreen.route)
+                                    }
+                                } else {
+                                    viewModel.getInventoryDb()
+                                    withContext(Dispatchers.Main) {
+                                        navController.navigate(Navigation.InventoryScreen.route)
+                                    }
+                                }
+                            } else {
+                                viewModel.getInventoryDb()
+                                withContext(Dispatchers.Main) {
+                                    navController.navigate(Navigation.InventoryScreen.route)
+                                }
+                            }
                         }
                     }
                 }
@@ -122,6 +141,7 @@ fun SteamIdScreen(
 @Composable
 fun SteamIdScreenPreview() {
     val navigationController = rememberNavController()
-    val viewModel: InventoryViewModel = viewModel()
-    SteamIdScreen(navigationController, viewModel, LocalContext.current)
+    val itemViewModel: InventoryViewModel = viewModel()
+    val appViewModel: AppViewModel = viewModel()
+    SteamIdScreen(navigationController, itemViewModel, appViewModel, LocalContext.current)
 }

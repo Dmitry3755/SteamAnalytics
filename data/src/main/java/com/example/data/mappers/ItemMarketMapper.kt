@@ -11,3 +11,12 @@ fun ItemMarketApiResponse.toItemMarket(): ItemMarket {
         medianPrice = this.medianPrice
     )
 }
+
+fun ItemMarket.toItemMarketApiResponse(): ItemMarketApiResponse {
+    return ItemMarketApiResponse(
+        success = this.success,
+        lowestPrice = this.lowestPrice,
+        volume = this.volume,
+        medianPrice = this.medianPrice
+    )
+}

@@ -1,14 +1,16 @@
 package com.example.data.entities
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class TagItemApiResponse(
     @SerializedName("category")
-    val category: String,
+    var category: String,
     @SerializedName("internal_name")
-    val internalName: String,
+    var internalName: String,
     @SerializedName("localized_category_name")
-    val localizedCategoryName: String,
+    var localizedCategoryName: String,
     @SerializedName("localized_tag_name")
-    val localizedTagName: String
+    var localizedTagName: String
 )

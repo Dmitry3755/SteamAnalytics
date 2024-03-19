@@ -9,3 +9,10 @@ fun DescriptionItemApiResponse.toItemDescription(): DescriptionItem {
         color = this.color
     )
 }
+
+fun DescriptionItem.toItemDescriptionApiResponse(): DescriptionItemApiResponse {
+    return DescriptionItemApiResponse(
+        value = this.value,
+        color = this.color
+    )
+}

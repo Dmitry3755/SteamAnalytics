@@ -4,8 +4,8 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
 }
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
@@ -81,6 +81,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.room:room-ktx:2.6.1")
+    val retrofit2_version = "2.9.0"
 
     implementation("androidx.compose.material:material:1.6.3")
     implementation("androidx.core:core-ktx:1.12.0")
@@ -110,8 +112,8 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     kapt("com.google.dagger:hilt-compiler:2.51")
     //Retrofit2
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:$retrofit2_version")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofit2_version")
     //Lib
     implementation(project(mapOf("path" to ":data")))
     implementation(project(mapOf("path" to ":domain")))

@@ -13,16 +13,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.steamanalytics.R
 import com.example.steamanalytics.ui.component.HeadersTextView
 import com.example.steamanalytics.ui.component.InventoryLazyColumn
 import com.example.steamanalytics.ui.theme.AppTheme
+import com.example.steamanalytics.viewmodels.AppViewModel
 import com.example.steamanalytics.viewmodels.InventoryViewModel
 
 @Composable
-fun InventoryScreen(navController: NavController, viewModel: InventoryViewModel) {
+fun InventoryScreen(
+    navController: NavController,
+    viewModel: InventoryViewModel,
+    appViewModel: AppViewModel
+) {
 
     Column {
         Box(
@@ -41,7 +47,7 @@ fun InventoryScreen(navController: NavController, viewModel: InventoryViewModel)
                 .padding(horizontal = dimensionResource(id = R.dimen.vertical_padding)),
             contentAlignment = Alignment.Center
         ) {
-            InventoryLazyColumn(navController, viewModel)
+            InventoryLazyColumn(navController, viewModel, appViewModel)
         }
     }
 
@@ -52,6 +58,6 @@ fun InventoryScreen(navController: NavController, viewModel: InventoryViewModel)
 fun InventoryScreenPreview() {
     AppTheme {
         val navController: NavController = rememberNavController()
-        InventoryScreen(navController, hiltViewModel())
+        InventoryScreen(navController, hiltViewModel(), viewModel())
     }
 }

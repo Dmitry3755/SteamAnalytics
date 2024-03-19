@@ -24,21 +24,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.domain.entities.InventoryItem
 import com.example.domain.utils.Result
 import com.example.steamanalytics.R
 import com.example.steamanalytics.ui.theme.AppTheme
+import com.example.steamanalytics.viewmodels.AppViewModel
 import com.example.steamanalytics.viewmodels.InventoryViewModel
 import com.example.steamanalytics.viewmodels.ItemViewModel
 
 @Composable
 fun InventoryLazyColumn(
     navController: NavController,
-    viewModel: InventoryViewModel
+    viewModel: InventoryViewModel,
+    appViewModel: AppViewModel
 ) {
-    val itemViewModel : ItemViewModel = hiltViewModel()
+    val itemViewModel: ItemViewModel = hiltViewModel()
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
@@ -95,8 +98,8 @@ fun InventoryLazyColumn(
                                 textAlign = TextAlign.Center
                             )
                         }
-                        if(it.marketable == 1) {
-                            ItemPriceText(it.marketName, itemViewModel)
+                        if (it.marketable == 1) {
+                            ItemPriceText(it.marketName, itemViewModel, appViewModel, it.id)
                         }
                     }
                 }
@@ -111,6 +114,6 @@ fun InventoryLazyColumn(
 private fun AccessoryLazyColumnPreview() {
     AppTheme {
         val navController: NavController = rememberNavController()
-        InventoryLazyColumn(navController, hiltViewModel())
+        InventoryLazyColumn(navController, hiltViewModel(), viewModel())
     }
 }
