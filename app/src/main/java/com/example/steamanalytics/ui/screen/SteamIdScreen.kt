@@ -24,8 +24,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -39,15 +37,19 @@ import com.example.steamanalytics.ui.navigation.Navigation
 import com.example.steamanalytics.utils.ViewError
 import com.example.steamanalytics.viewmodels.AppViewModel
 import com.example.steamanalytics.viewmodels.InventoryViewModel
+import com.example.steamanalytics.viewmodels.ItemViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
 fun SteamIdScreen(
     navController: NavController,
-    viewModel: InventoryViewModel = hiltViewModel(),
+    inventoryViewModel: InventoryViewModel = hiltViewModel(),
     appViewModel: AppViewModel,
+    itemViewModel: ItemViewModel = hiltViewModel(),
     context: Context
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -56,7 +58,7 @@ fun SteamIdScreen(
     Column(
         modifier = Modifier
             .fillMaxSize(1f)
-            .background(MaterialTheme.colorScheme.surface)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Box(
             modifier = Modifier
@@ -72,7 +74,7 @@ fun SteamIdScreen(
                 .fillMaxWidth(1f)
                 .weight(0.8f)
                 .background(
-                    MaterialTheme.colorScheme.background,
+                    MaterialTheme.colorScheme.surface,
                     shape = RoundedCornerShape(25.dp, 25.dp, 0.dp, 0.dp)
                 )
                 .padding(
@@ -87,7 +89,7 @@ fun SteamIdScreen(
             ) {
                 AppTextField(
                     hintTextField = stringResource(id = R.string.edit_text_hint_enter_steam_id),
-                    value = viewModel.steamId,
+                    value = inventoryViewModel.steamId,
                     viewError = verifyResultViewError
                 )
                 Spacer(Modifier.padding(top = dimensionResource(id = R.dimen.horizontal_padding)))
@@ -107,27 +109,23 @@ fun SteamIdScreen(
                     coroutineScope.launch {
                         withContext(Dispatchers.IO) {
                             appViewModel.internetState.value = CheckInternetState(context)
-                            if (CheckInternetState(context)) {
-                                val result = viewModel.getInventory(verifyResultViewError)
+                            if (appViewModel.internetState.value) {
+                                val result = inventoryViewModel.getInventory(verifyResultViewError)
                                 if (result is Result.Success) {
-                                    viewModel.inventoryItemList =
+                                    inventoryViewModel.inventoryItemList =
                                         result.data.descriptions.toMutableList()
-                                    viewModel.insertItemDb()
-                                    viewModel.updateInventoryDb()
-                                    withContext(Dispatchers.Main) {
-                                        navController.navigate(Navigation.InventoryScreen.route)
-                                    }
+                                    inventoryViewModel.insertItemsDb()
+                                    itemViewModel.getPriceAllOfItemsDb()
+                                    navigate(coroutineScope, navController)
                                 } else {
-                                    viewModel.getInventoryDb()
-                                    withContext(Dispatchers.Main) {
-                                        navController.navigate(Navigation.InventoryScreen.route)
-                                    }
+                                    inventoryViewModel.getInventoryDb()
+                                    itemViewModel.getPriceAllOfItemsDb()
+                                    navigate(coroutineScope, navController)
                                 }
                             } else {
-                                viewModel.getInventoryDb()
-                                withContext(Dispatchers.Main) {
-                                    navController.navigate(Navigation.InventoryScreen.route)
-                                }
+                                inventoryViewModel.getInventoryDb()
+                                itemViewModel.getPriceAllOfItemsDb()
+                                navigate(coroutineScope, navController)
                             }
                         }
                     }
@@ -137,11 +135,26 @@ fun SteamIdScreen(
     }
 }
 
+fun navigate(coroutineScope: CoroutineScope, navController: NavController) {
+    coroutineScope.launch {
+        withContext(Dispatchers.Main) {
+            navController.navigate(Navigation.InventoryScreen.route)
+        }
+    }
+}
+
 @Preview
 @Composable
 fun SteamIdScreenPreview() {
     val navigationController = rememberNavController()
-    val itemViewModel: InventoryViewModel = viewModel()
+    val inventoryViewModel: InventoryViewModel = viewModel()
     val appViewModel: AppViewModel = viewModel()
-    SteamIdScreen(navigationController, itemViewModel, appViewModel, LocalContext.current)
+    val itemViewModel: ItemViewModel = viewModel()
+    SteamIdScreen(
+        navigationController,
+        inventoryViewModel,
+        appViewModel,
+        itemViewModel,
+        LocalContext.current
+    )
 }

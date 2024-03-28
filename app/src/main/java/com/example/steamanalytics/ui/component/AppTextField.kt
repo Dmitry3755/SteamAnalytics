@@ -32,12 +32,12 @@ fun AppTextField(
     OutlinedTextField(
         value = value.value,
         modifier = Modifier.fillMaxWidth(1f),
-        textStyle = MaterialTheme.typography.bodyMedium,
+        textStyle = MaterialTheme.typography.bodySmall,
         placeholder = {
             Text(
                 text = hintTextField,
                 color = MaterialTheme.colorScheme.outline,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.labelMedium
             )
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -51,8 +51,9 @@ fun AppTextField(
         },
         shape = shapes.medium,
         colors = TextFieldDefaults.textFieldColors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.outline,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.outline,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            textColor = MaterialTheme.colorScheme.onPrimary,
             backgroundColor = MaterialTheme.colorScheme.background
         )
     )

@@ -1,11 +1,15 @@
 package com.example.steamanalytics.ui.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -16,21 +20,28 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.domain.utils.Result
 import com.example.steamanalytics.R
 import com.example.steamanalytics.ui.component.HeadersTextView
 import com.example.steamanalytics.ui.component.InventoryLazyColumn
 import com.example.steamanalytics.ui.theme.AppTheme
 import com.example.steamanalytics.viewmodels.AppViewModel
 import com.example.steamanalytics.viewmodels.InventoryViewModel
+import com.example.steamanalytics.viewmodels.ItemViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun InventoryScreen(
     navController: NavController,
-    viewModel: InventoryViewModel,
-    appViewModel: AppViewModel
+    viewModel: InventoryViewModel
 ) {
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(1f)
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth(1f)
@@ -47,7 +58,7 @@ fun InventoryScreen(
                 .padding(horizontal = dimensionResource(id = R.dimen.vertical_padding)),
             contentAlignment = Alignment.Center
         ) {
-            InventoryLazyColumn(navController, viewModel, appViewModel)
+            InventoryLazyColumn(navController, viewModel)
         }
     }
 
@@ -58,6 +69,6 @@ fun InventoryScreen(
 fun InventoryScreenPreview() {
     AppTheme {
         val navController: NavController = rememberNavController()
-        InventoryScreen(navController, hiltViewModel(), viewModel())
+        InventoryScreen(navController, hiltViewModel())
     }
 }

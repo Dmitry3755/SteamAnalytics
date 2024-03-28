@@ -19,19 +19,11 @@ class InventoryRepositoryDbImpl @Inject constructor(private val inventoryDao: In
 
     override suspend fun getAllItems(): List<InventoryItem> {
         return inventoryDao.getAllItems()
-            .mapIndexed { index, itemApiResponse -> itemApiResponse.toItem(index) }
-    }
-
-    override suspend fun getPriceOfItem(itemId: Int): String? {
-        return inventoryDao.getPriceOfItem(itemId)
+            .mapIndexed { index, itemApiResponse -> itemApiResponse.toItem(index + 1) }
     }
 
     override suspend fun insertItem(itemsList: List<InventoryItem>) {
         inventoryDao.insertItems(itemsList.map { it.toItemApiResponse() })
-    }
-
-    override suspend fun insertPriceOfItem(itemMarket: ItemMarket) {
-        inventoryDao.insertPriceOfItem(itemMarket.toItemMarketApiResponse())
     }
 
     override suspend fun update(itemsList: List<InventoryItem>) {

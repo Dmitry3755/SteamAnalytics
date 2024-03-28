@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.data.AppDatabase
 import com.example.data.dao.InventoryDao
+import com.example.data.dao.ItemMarketDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,8 +28,13 @@ object DatabaseModule {
 
     @Provides
     @ViewModelScoped
-    fun provideLogDao(appDatabase: AppDatabase): InventoryDao {
+    fun provideInventoryDao(appDatabase: AppDatabase): InventoryDao {
         return appDatabase.inventoryDao()
     }
 
+    @Provides
+    @ViewModelScoped
+    fun provideItemMarketDao(appDatabase: AppDatabase): ItemMarketDao {
+        return appDatabase.itemMarketDao()
+    }
 }

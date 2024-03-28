@@ -16,7 +16,7 @@ import com.google.gson.annotations.SerializedName
 )
 data class ItemApiResponse(
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
+    var id: Int = 1,
     @ColumnInfo(name = "icon_url")
     @SerializedName("icon_url")
     var iconUrl: String,

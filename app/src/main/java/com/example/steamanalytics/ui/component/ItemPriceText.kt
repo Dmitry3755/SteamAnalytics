@@ -12,43 +12,75 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.domain.entities.InventoryItem
+import com.example.domain.entities.ItemMarket
 import com.example.domain.utils.Result
 import com.example.steamanalytics.viewmodels.AppViewModel
 import com.example.steamanalytics.viewmodels.InventoryViewModel
 import com.example.steamanalytics.viewmodels.ItemViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
 fun ItemPriceText(
-    marketName: String,
     itemViewModel: ItemViewModel,
     appViewModel: AppViewModel,
-    id: Int
+    inventoryItem: InventoryItem
 ) {
 
-    var price by remember { mutableStateOf("") }
+    var price by remember { mutableStateOf<String?>(null) }
 
-    LaunchedEffect(marketName) {
-        if (appViewModel.internetState.value) {
-            val context = withContext(Dispatchers.IO) {
-                itemViewModel.getPriceOfItem(marketName)
-            }
-            if (context is Result.Success) {
-                price = context.data.lowestPrice ?: ""
-                itemViewModel.itemPriceList.add(context.data)
-                itemViewModel.insertPriceOfItem(itemViewModel.itemPriceList.lastIndex)
+    LaunchedEffect(inventoryItem.marketHashName) {
+        withContext(Dispatchers.IO) {
+            if (appViewModel.internetState.value) {
+                val result = itemViewModel.getPriceOfItem(inventoryItem.marketHashName)
+                when (result) {
+                    is Result.Success -> {
+                        for ((index, item) in itemViewModel.itemPriceList.withIndex()) {
+                            if (item.itemId == inventoryItem.id) {
+                                itemViewModel.updateCurrentPriceOfItem(index, result.data)
+                                break
+                            }
+                        }
+                        itemViewModel.insertPriceOfItem(
+                            ItemMarket(
+                                id = inventoryItem.id,
+                                lowestPrice = result.data.lowestPrice,
+                                success = result.data.success,
+                                volume = result.data.volume,
+                                medianPrice = result.data.medianPrice,
+                                itemId = inventoryItem.id
+                            )
+                        )
+                        price = result.data.lowestPrice ?: ""
+                    }
+                    is Result.Error -> price = result.exception.message
+                    else -> price = ""
+                }
             } else {
-                price = itemViewModel.getPriceOfItemDb(id) ?: ""
+                if (itemViewModel.itemPriceList.isNotEmpty()) {
+                    for (item in itemViewModel.itemPriceList) {
+                        if (item.itemId == inventoryItem.id)
+                            price = item.lowestPrice ?: ""
+                    }
+                } else {
+                    price = ""
+                }
             }
-        } else {
-            price = itemViewModel.getPriceOfItemDb(id)  ?: ""
         }
     }
 
-    Text(
-        text = price,
-        style = MaterialTheme.typography.bodyMedium,
-        textAlign = TextAlign.Center
-    )
+    price?.let {
+        if (inventoryItem.marketable == 1) {
+            Text(
+                text = "Цена:" + it,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Start,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+
+    }
 }

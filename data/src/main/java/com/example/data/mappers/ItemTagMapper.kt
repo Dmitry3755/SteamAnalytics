@@ -9,7 +9,8 @@ fun TagItemApiResponse.toItemTag(): TagItem {
         category = this.category,
         internalName = this.internalName,
         localizedCategoryName = this.localizedCategoryName,
-        localizedTagName = this.localizedTagName
+        localizedTagName = this.localizedTagName,
+        color = this.color
     )
 }
 
@@ -18,6 +19,7 @@ fun TagItem.toTagItemApiResponse(): TagItemApiResponse {
         category = this.category,
         internalName = this.internalName,
         localizedCategoryName = this.localizedCategoryName,
-        localizedTagName = this.localizedTagName
+        localizedTagName = this.localizedTagName,
+        color = this.color
     )
 }

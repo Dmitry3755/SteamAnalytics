@@ -105,8 +105,12 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
     //Picasso
     implementation("com.squareup.picasso:picasso:2.8")
+    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0")
     //Hilt
     implementation("com.google.dagger:hilt-android:2.51")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")

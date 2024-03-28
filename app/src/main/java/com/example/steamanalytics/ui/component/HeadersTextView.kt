@@ -16,6 +16,7 @@ fun HeadersTextView (text: String) {
     Text (
         text = text,
         modifier = Modifier.background(color = Color.Transparent),
+        color = MaterialTheme.colorScheme.onPrimary,
         style = MaterialTheme.typography.titleLarge
     )
 }

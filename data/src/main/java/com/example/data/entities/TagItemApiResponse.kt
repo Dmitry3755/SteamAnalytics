@@ -12,5 +12,7 @@ data class TagItemApiResponse(
     @SerializedName("localized_category_name")
     var localizedCategoryName: String,
     @SerializedName("localized_tag_name")
-    var localizedTagName: String
+    var localizedTagName: String,
+    @SerializedName("color")
+    var color : String?
 )

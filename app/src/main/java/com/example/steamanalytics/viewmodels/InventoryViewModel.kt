@@ -44,7 +44,7 @@ class InventoryViewModel @Inject constructor(
         return getInventoryDbUseCase.invoke()
     }
 
-    suspend fun insertItemDb() {
+    suspend fun insertItemsDb() {
         insertInventoryDbUseCase.invoke(inventoryItemList)
     }
 }

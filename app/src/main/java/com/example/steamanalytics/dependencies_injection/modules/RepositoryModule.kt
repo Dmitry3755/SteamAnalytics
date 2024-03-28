@@ -3,9 +3,11 @@ package com.example.steamanalytics.dependencies_injection.modules
 import com.example.data.repositories.db.InventoryRepositoryDbImpl
 import com.example.data.repositories.InventoryRepositoryImpl
 import com.example.data.repositories.ItemMarketRepositoryImpl
+import com.example.data.repositories.db.ItemMarketRepositoryDbImpl
 import com.example.domain.repositories.InventoryRepository
 import com.example.domain.repositories.ItemMarketRepository
 import com.example.domain.repositories.InventoryRepositoryDb
+import com.example.domain.repositories.ItemMarketRepositoryDb
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -42,4 +44,8 @@ abstract class DatabaseRepositoryModule {
     @Binds
     @ViewModelScoped
     abstract fun bindDatabaseInventoryRepository(inventoryRepositoryDbImpl: InventoryRepositoryDbImpl): InventoryRepositoryDb
+
+    @Binds
+    @ViewModelScoped
+    abstract fun bindDatabaseItemMarketRepository(itemMarketRepositoryDbImpl: ItemMarketRepositoryDbImpl): ItemMarketRepositoryDb
 }

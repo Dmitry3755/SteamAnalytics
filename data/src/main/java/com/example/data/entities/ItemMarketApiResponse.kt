@@ -16,7 +16,7 @@ import com.google.gson.annotations.SerializedName
 )
 data class ItemMarketApiResponse(
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0,
+    var id: Int = 1,
     @SerializedName("success")
     var success: Boolean,
     @ColumnInfo(name = "lowest_price")
@@ -28,19 +28,6 @@ data class ItemMarketApiResponse(
     @SerializedName("median_price")
     var medianPrice: String?,
     @ColumnInfo(name = "item_id", index = true)
-    var itemId: Long
-) {
-    constructor(
-        success: Boolean,
-        lowestPrice: String?,
-        volume: String?,
-        medianPrice: String?
-    ) : this(
-        0,
-        false,
-        "",
-        "",
-        "",
-        0
-    )
-}
+    var itemId: Int
+)
+

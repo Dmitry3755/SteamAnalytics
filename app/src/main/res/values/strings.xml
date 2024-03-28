@@ -3,6 +3,7 @@
     <string name="edit_text_hint_enter_steam_id">Введите SteamID</string>
     <string name="edit_text_enter_your_steam_id">Введите свой SteamId</string>
     <string name="button_text_continue">Продолжить</string>
+    <string name="item_description">Описание</string>
 
     <string name="error_steam_id_not_enter">Вы не ввели SteamId</string>
     <string name="error_steam_id_consist_only_of_numbers">SteamId должен состоять только из цифр</string>
